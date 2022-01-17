@@ -20,6 +20,7 @@ resource "random_pet" "random_suffix" {
 
 resource "google_container_registry" "registry" {
   project  = var.project
+  depends_on = [google_project_service.container_registry_service]
 }
 
 resource "google_service_account" "service_account" {
@@ -49,5 +50,10 @@ resource "google_container_cluster" "kubernetes_cluster" {
 
 resource "google_project_service" "container_service" {
   service                    = "container.googleapis.com"
+  disable_dependent_services = true
+}
+
+resource "google_project_service" "container_registry_service" {
+  service                    = "containerregistry.googleapis.com"
   disable_dependent_services = true
 }
