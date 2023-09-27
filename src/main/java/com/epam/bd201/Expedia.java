@@ -5,6 +5,9 @@ import org.apache.avro.generic.GenericDatumReader;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.io.DatumReader;
 
+/**
+ * Single class for storing Expedia row AVRO format.
+ */
 public class Expedia {
 
     public final static Schema AVRO_SCHEMA = new Schema.Parser().parse(

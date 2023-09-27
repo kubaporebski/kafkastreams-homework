@@ -6,6 +6,11 @@ import org.apache.kafka.streams.StreamsConfig;
 import java.util.Objects;
 import java.util.Properties;
 
+/**
+ * Single class for storing all the configuration.
+ *
+ * In general, this config is read from environment variables. The constants' names are self-explanatory.
+ */
 public class AppConfig {
 
     private static final Properties kafkaProperties = new Properties();
@@ -17,6 +22,12 @@ public class AppConfig {
     public static final String BOOTSTRAP_SERVER = Objects.toString(System.getenv("BOOTSTRAP_SERVER"), "kafka:9092");
 
     public static final String SCHEMA_REGISTRY_URL = Objects.toString(System.getenv("SCHEMA_REGISTRY_URL"), "http://schema-registry:8081");
+
+    /** Source GCP bucket name */
+    public static final String SOURCE_BUCKET_NAME = Objects.toString(System.getenv("BUCKET_NAME"), "storage-bucket-large-hedgehog");
+
+    /** Directory within bucket name where is Expedia data */
+    public static final String SOURCE_DATA_DIR = Objects.toString(System.getenv("DATA_DIR"), "m12kafkastreams/topics/expedia/");
 
     static {
         kafkaProperties.put(StreamsConfig.APPLICATION_ID_CONFIG, "jporebski-kafkastreams");
