@@ -16,7 +16,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * Single class for storing Expedia row AVRO format.
+ * Single class for managing Expedia-related things.
  */
 public class Expedia {
 
@@ -34,7 +34,7 @@ public class Expedia {
 
     /**
      * Processing an input row into output row.
-     * Here we are calculating a duration of each check-in.
+     * Here we are calculating a duration of each hotel check-in, and the result is stored into the output row.
      *
      * @param row input expedia row
      * @return enriched expedia row
