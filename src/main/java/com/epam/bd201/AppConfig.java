@@ -1,8 +1,12 @@
 package com.epam.bd201;
 
+import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
+import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsConfig;
 
+import java.util.Collections;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -13,7 +17,7 @@ import java.util.Properties;
  */
 public class AppConfig {
 
-    private static final Properties kafkaProperties = new Properties();
+    private static final Properties streamProperties = new Properties();
 
     public static final String INPUT_TOPIC_NAME = "expedia";
 
@@ -30,14 +34,19 @@ public class AppConfig {
     public static final String SOURCE_DATA_DIR = Objects.toString(System.getenv("DATA_DIR"), "m12kafkastreams/topics/expedia/");
 
     static {
-        kafkaProperties.put(StreamsConfig.APPLICATION_ID_CONFIG, "jporebski-kafkastreams");
-        kafkaProperties.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVER);
-        kafkaProperties.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
-        kafkaProperties.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
-        kafkaProperties.put("schema.registry.url", SCHEMA_REGISTRY_URL);
+        streamProperties.put(StreamsConfig.APPLICATION_ID_CONFIG, "jporebski-kafkastreams");
+        streamProperties.put(StreamsConfig.CLIENT_ID_CONFIG, "jporebski-kafkastreams-client");
+        streamProperties.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVER);
+        streamProperties.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.Integer().getClass().getName());
+        streamProperties.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, SpecificAvroSerde.class);
+        streamProperties.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, SCHEMA_REGISTRY_URL);
     }
 
-    public static Properties getKafkaProperties() {
-        return kafkaProperties;
+    public static Properties getStreamProperties() {
+        return streamProperties;
+    }
+
+    public static Map<String, String> getSchemaRegistryConfig() {
+        return Collections.singletonMap(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, AppConfig.SCHEMA_REGISTRY_URL);
     }
 }

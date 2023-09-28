@@ -16,7 +16,6 @@ import org.apache.kafka.common.serialization.IntegerSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Objects;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -95,7 +94,7 @@ public class ExpediaDataReader implements Runnable {
         props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, AppConfig.BOOTSTRAP_SERVER);
         props.put(ProducerConfig.CLIENT_ID_CONFIG, "expedia-data-producer");
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, IntegerSerializer.class.getName());
-        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, io.confluent.kafka.serializers.KafkaAvroSerializer.class.getName());
+        props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, io.confluent.kafka.serializers.KafkaAvroSerializer.class);
         props.put("schema.registry.url", AppConfig.SCHEMA_REGISTRY_URL);
         return new KafkaProducer<>(props);
     }
