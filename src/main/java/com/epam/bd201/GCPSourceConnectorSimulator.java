@@ -23,17 +23,17 @@ import java.util.regex.Pattern;
 /**
  * Class for reading data from a GCP bucket and storing it into a Kafka topic.
  *
- * This class behaves like Kafka Connect operator.
+ * This class behaves like a Kafka connector, hence the name.
  */
-public class ExpediaDataReader implements Runnable {
+public class GCPSourceConnectorSimulator implements Runnable {
 
-    private static final Logger logger = LoggerFactory.getLogger(ExpediaDataReader.class);
+    private static final Logger logger = LoggerFactory.getLogger(GCPSourceConnectorSimulator.class);
 
     /** Regex for extracting a partition number from an AVRO file path */
     private final Pattern rePartitionNr = Pattern.compile(".+partition=([0-9]+).+");
 
     /** Reader of AVRO rows contained in a single AVRO file */
-    private final DatumReader<GenericRecord> expediaDatumReader = Expedia.getDatumReader();
+    private final DatumReader<GenericRecord> expediaDatumReader = ExpediaManagement.getDatumReader();
 
     @Override
     public void run() {

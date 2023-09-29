@@ -36,7 +36,7 @@ public class KStreamsApplication {
             final StreamsBuilder builder = new StreamsBuilder();
             final KStream<Integer, ExpediaIn> inputRecords = builder.stream(AppConfig.INPUT_TOPIC_NAME, Consumed.with(Serdes.Integer(), serdeExpediaIn));
             inputRecords
-                    .mapValues(Expedia::process)
+                    .mapValues(ExpediaManagement::process)
                     .to(AppConfig.OUTPUT_TOPIC_NAME, Produced.with(Serdes.Integer(), serdeExpediaOut));
 
             final Topology topology = builder.build();
@@ -50,7 +50,7 @@ public class KStreamsApplication {
 
                 // 2. and then start copying expedia data
                 logger.info("Starting reading data from a GCP bucket");
-                ste.submit(new ExpediaDataReader()).get();
+                ste.submit(new GCPSourceConnectorSimulator()).get();
             }
 
             logger.info("Finished the task");

@@ -18,9 +18,12 @@ import java.util.stream.Collectors;
 /**
  * Single class for managing Expedia-related things.
  */
-public class Expedia {
+public final class ExpediaManagement {
 
-    private final static Logger logger = LoggerFactory.getLogger(Expedia.class);
+    /** Not to be instantiated */
+    private ExpediaManagement() { }
+
+    private final static Logger logger = LoggerFactory.getLogger(ExpediaManagement.class);
 
     public static final List<String> INPUT_FIELD_NAMES = ExpediaIn.getClassSchema()
             .getFields()
@@ -34,7 +37,7 @@ public class Expedia {
 
     /**
      * Processing an input row into output row.
-     * Here we are calculating a duration of each hotel check-in, and the result is stored into the output row.
+     * Here we are calculating a duration of each hotel stay, and the result is stored in the output row.
      *
      * @param row input expedia row
      * @return enriched expedia row
@@ -47,7 +50,7 @@ public class Expedia {
             newRow.put(field, row.get(field));
         }
 
-        // perform a calculation of a duration of time spent in a given hotel
+        // perform calculation of duration of time spent in a given hotel
         String checkIn = Objects.toString(row.getSrchCi(), "");
         String checkOut = Objects.toString(row.getSrchCo(), "");
         String duration = calculateTextDuration(checkIn, checkOut).toString();
@@ -74,6 +77,19 @@ public class Expedia {
         }
     }
 
+    /**
+     * Returning the right category of the duration between two given dates.
+     * Categories returned are as follows:
+     * - "Erroneous data": null, less than or equal to zero,
+     * - "Short stay": 1-4 days,
+     * - "Standard stay": 5-10 days,
+     * - "Standard extended stay": 11-14 days,
+     * - "Long stay": 2 weeks plus.
+     *
+     * @param strCheckIn check-in (start) date, non-null string, may be empty
+     * @param strCheckOut check-out (end) date, non-null string, may be empty
+     * @return one of the DurationValue instance
+     */
     private static DurationValue calculateTextDuration(String strCheckIn, String strCheckOut) {
         try {
             if (strCheckIn.isEmpty() || strCheckOut.isEmpty())
