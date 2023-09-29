@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
         - name: kstream-app
-          image: #You application image
+          image: europe-central2-docker.pkg.dev/jporebski-proj/jporebski-repo/kstream-app:v3
       imagePullSecrets:
-        - name: #Your service account JSON key secret
+        - name: secret/2ffc4f267ac98ec3754368793fc6ab9bed747f8e

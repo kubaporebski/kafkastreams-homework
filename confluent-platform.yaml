@@ -25,20 +25,6 @@ spec:
   dataVolumeCapacity: 10Gi
   metricReporter:
     enabled: true
----
-apiVersion: platform.confluent.io/v1beta1
-kind: Connect
-metadata:
-  name: connect
-  namespace: confluent
-spec:
-  replicas: 1
-  image:
-    application: #Your GCS connector
-    init: confluentinc/cp-init-container-operator:6.1.0.0
-  dependencies:
-    kafka:
-      bootstrapEndpoint: kafka:9071
 
 ---
 apiVersion: platform.confluent.io/v1beta1
