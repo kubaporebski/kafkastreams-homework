@@ -12,6 +12,7 @@
 
 ## Steps to recreate
 * Build the application using `mvn package`.
+* Copy your service account key json file into the root directory of this project.
 * Create docker image using `Dockerfile` in the root directory of this project.
 
 ### Running locally
@@ -21,10 +22,39 @@ docker-compose -f docker-compose-kafka-minimal.yml up -d
 ```
 * Run the container:
 ``` 
-docker run --rm --name qstreams --network host  -v /your/google/service-account/key/file.json:/opt/google.key -e GOOGLE_APPLICATION_CREDENTIALS=/opt/google.key -e GOOGLE_APPLICATION_CREDENTIALS=/opt/google.key -it [dockerimagename]
+docker run --rm --name qstreams --network host  -it [dockerimagename]
 ```
 
 ### Running in the cloud
-* Push to Kubernetes.
-* Run it in the Cloud.
+* It's important to do things according to the OLD_README.md file, which includes following steps.
+* Prepare GCP using terraform by going to the `terraform` directory and executing `terraform init && terraform plan -out tf.plan && terraform apply tf.plan`.
+* Configure your local CLI tools to work in provisioned via terraform infrastructure.
+* Results should look like this:
 
+![](docs/kubectl_prepare.png)
+
+![](docs/kubectl_apply_results.png)
+
+* Screen below shows pods running:
+
+![](docs/kubectl_get_pods_results.png)
+
+* What it looks like in the GCP console?
+
+![](docs/pods_in_the_cloud.png)
+
+* We have to create topics now. Let's do it via Confluent Control Center UI:
+
+![](docs/kafka_topics.png)
+
+* We should now configure `kstream-app.yaml` and update various values, 
+    and we must not forget about environment variables containing locations of Kafka Cluster and Schema Registry.
+* When we run `kubectl apply -f kstream-app.yaml`, there should be another pod created:
+
+![](docs/kstream_app_running.png)
+
+* After a while, we can see the results. We need to go to Confluent Control Center, get into the `expedia_ext` topic and look at its data:
+
+![](docs/expedia_ext_results.png)
+
+* And done!
