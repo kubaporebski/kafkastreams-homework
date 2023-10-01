@@ -10,15 +10,14 @@ import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Produced;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Logger;
 
 public class KStreamsApplication {
 
-    private static final Logger logger = LoggerFactory.getLogger(KStreamsApplication.class);
+    private static final Logger logger = Logger.getLogger(KStreamsApplication.class.getName());
 
     private static final ExecutorService ste = Executors.newSingleThreadExecutor();
 
@@ -55,7 +54,7 @@ public class KStreamsApplication {
 
             logger.info("Finished the task");
         } catch (Throwable e) {
-            logger.error("Terrible error occurred", e);
+            logger.severe("Terrible error occurred: " + e);
             System.exit(1);
         } finally {
             ste.shutdownNow();

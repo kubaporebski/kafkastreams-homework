@@ -13,10 +13,9 @@ import org.apache.kafka.clients.producer.Producer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.serialization.IntegerSerializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,7 +26,7 @@ import java.util.regex.Pattern;
  */
 public class GCPSourceConnectorSimulator implements Runnable {
 
-    private static final Logger logger = LoggerFactory.getLogger(GCPSourceConnectorSimulator.class);
+    private static final Logger logger = Logger.getLogger(GCPSourceConnectorSimulator.class.getName());
 
     /** Regex for extracting a partition number from an AVRO file path */
     private final Pattern rePartitionNr = Pattern.compile(".+partition=([0-9]+).+");
@@ -69,7 +68,7 @@ public class GCPSourceConnectorSimulator implements Runnable {
                         GenericRecord row = dataFileReader.next();
 
                         // when record is read, send it to a kafka topic in specified partition
-                        logger.debug(String.format("Sending row %d/%d to the Kafka topic", dataFileReader.tell(), blobContents.length));
+                        logger.fine(String.format("Sending row %d/%d to the Kafka topic", dataFileReader.tell(), blobContents.length));
                         producer.send(new ProducerRecord<>(AppConfig.INPUT_TOPIC_NAME, partitionNr, row));
                     }
                     logger.info("Sending the file is done");
@@ -79,7 +78,7 @@ public class GCPSourceConnectorSimulator implements Runnable {
 
                 logger.info("All data sent. Done");
         } catch (Exception e) {
-            logger.error("Error during data reading", e);
+            logger.severe("Error during data reading: " + e);
             throw new RuntimeException(e);
         }
     }

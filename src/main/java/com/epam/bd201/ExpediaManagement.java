@@ -6,13 +6,12 @@ import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericDatumReader;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.io.DatumReader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -23,7 +22,7 @@ public final class ExpediaManagement {
     /** Not to be instantiated */
     private ExpediaManagement() { }
 
-    private final static Logger logger = LoggerFactory.getLogger(ExpediaManagement.class);
+    private final static Logger logger = Logger.getLogger(ExpediaManagement.class.getName());
 
     public static final List<String> INPUT_FIELD_NAMES = ExpediaIn.getClassSchema()
             .getFields()
@@ -112,7 +111,7 @@ public final class ExpediaManagement {
                 return DurationValue.LONG;
 
         } catch (Exception ex) {
-            logger.info(String.format("Failed getting difference between %s and %s", strCheckIn, strCheckOut), ex);
+            logger.info(String.format("Failed getting difference between %s and %s: %s", strCheckIn, strCheckOut, ex));
             return DurationValue.ERR;
         }
     }

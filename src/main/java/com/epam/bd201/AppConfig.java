@@ -23,9 +23,9 @@ public class AppConfig {
 
     public static final String OUTPUT_TOPIC_NAME = "expedia_ext";
 
-    public static final String BOOTSTRAP_SERVER = Objects.toString(System.getenv("BOOTSTRAP_SERVER"), "kafka:9092");
+    public static final String BOOTSTRAP_SERVER = Objects.toString(System.getenv("BOOTSTRAP_SERVER"), "localhost:9092");
 
-    public static final String SCHEMA_REGISTRY_URL = Objects.toString(System.getenv("SCHEMA_REGISTRY_URL"), "http://schema-registry:8081");
+    public static final String SCHEMA_REGISTRY_URL = Objects.toString(System.getenv("SCHEMA_REGISTRY_URL"), "http://localhost:8081");
 
     /** Source GCP bucket name */
     public static final String SOURCE_BUCKET_NAME = Objects.toString(System.getenv("BUCKET_NAME"), "storage-bucket-large-hedgehog");
