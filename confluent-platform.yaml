@@ -40,6 +40,9 @@ spec:
     application: confluentinc/cp-ksqldb-server:7.5.0
     init: confluentinc/confluent-init-container:2.7.0
   dataVolumeCapacity: 10Gi
+  configOverrides:
+    server:
+      - ksql.schema.registry.url=http://schemaregistry.confluent.svc.cluster.local:8081
 ---
 apiVersion: platform.confluent.io/v1beta1
 kind: ControlCenter
