@@ -11,6 +11,7 @@ import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Produced;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
@@ -41,23 +42,33 @@ public class KStreamsApplication {
             final Topology topology = builder.build();
             logger.info(topology.describe().toString());
 
-            try (final KafkaStreams streams = new KafkaStreams(topology, AppConfig.getStreamProperties())) {
 
-                // 1. run streaming operations
-                logger.info("Starting streaming operations");
-                streams.start();
+            final KafkaStreams streams = new KafkaStreams(topology, AppConfig.getStreamProperties());
+            final CountDownLatch latch = new CountDownLatch(1);
 
-                // 2. and then start copying expedia data
-                logger.info("Starting reading data from a GCP bucket");
-                ste.submit(new GCPSourceConnectorSimulator()).get();
-            }
+            // attach shutdown handler to catch control-c
+            Runtime.getRuntime().addShutdownHook(new Thread("streams-shutdown-hook") {
+                @Override
+                public void run() {
+                    streams.close();
+                    latch.countDown();
+                }
+            });
+
+            // 1. run streaming operations
+            logger.info("Starting streaming operations");
+            streams.start();
+
+            // 2. and then start copying expedia data
+            logger.info("Starting reading data from a GCP bucket");
+            ste.submit(new GCPSourceConnectorSimulator()).get();
 
             logger.info("Finished the task");
+            latch.await();
+
         } catch (Throwable e) {
             logger.severe("Terrible error occurred: " + e);
             System.exit(1);
-        } finally {
-            ste.shutdownNow();
         }
         System.exit(0);
     }

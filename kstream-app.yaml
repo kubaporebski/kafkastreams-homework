@@ -15,11 +15,11 @@ spec:
     spec:
       containers:
         - name: kstream-app
-          image: europe-central2-docker.pkg.dev/jporebski-proj/jporebski-repo/kstream-app:v5
+          image: europe-central2-docker.pkg.dev/jporebski-proj/jporebski-repo/kstream-app:v8
           env:
             - name: BOOTSTRAP_SERVER
               value: kafka.confluent.svc.cluster.local:9071
             - name: SCHEMA_REGISTRY_URL
-              value: http://schemaregistry:8081
+              value: http://schemaregistry.confluent.svc.cluster.local:8081
       imagePullSecrets:
         - name: secret/2ffc4f267ac98ec3754368793fc6ab9bed747f8e
