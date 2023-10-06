@@ -61,18 +61,20 @@ public class GCPSourceConnectorSimulator implements Runnable {
 
                     // start reading data as a stream of AVRO records
                     logger.info("Sending the file in parts to the Kafka topic");
-                    SeekableByteArrayInput sin = new SeekableByteArrayInput(blobContents);
-                    DataFileReader<GenericRecord> dataFileReader = new DataFileReader<>(sin, expediaDatumReader);
-                    while (dataFileReader.hasNext()) {
+                    try (SeekableByteArrayInput sin = new SeekableByteArrayInput(blobContents);
+                         DataFileReader<GenericRecord> dataFileReader = new DataFileReader<>(sin, expediaDatumReader)) {
 
-                        GenericRecord row = dataFileReader.next();
+                        while (dataFileReader.hasNext()) {
 
-                        // when record is read, send it to a kafka topic in specified partition
-                        logger.fine(String.format("Sending row %d/%d to the Kafka topic", dataFileReader.tell(), blobContents.length));
-                        producer.send(new ProducerRecord<>(AppConfig.INPUT_TOPIC_NAME, partitionNr, row));
+                            GenericRecord row = dataFileReader.next();
+
+                            // when record is read, send it to a kafka topic in specified partition
+                            // logger.fine(String.format("Sending row %d/%d to the Kafka topic", dataFileReader.tell(), blobContents.length));
+                            producer.send(new ProducerRecord<>(AppConfig.INPUT_TOPIC_NAME, partitionNr, row));
+                        }
                     }
-                    logger.info("Sending the file is done");
 
+                    logger.info("Sending the file is done");
                     Thread.sleep(100);
                 }
 
