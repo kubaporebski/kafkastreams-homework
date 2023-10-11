@@ -47,6 +47,15 @@ docker run --rm --name qstreams --network host  -it [dockerimagename]
 
 ![](docs/kafka_topics.png)
 
+* Or we can do it with bash. 
+* Make sure to set up `../kafka_2.13-3.4.0/bin/kafka-topics.sh --create --topic expedia --partitions 3 --replication-factor 1 --bootstrap-server kafka-0.kafka.confluent.svc.cluster.local` as pointing to `127.0.0.1` in `/etc/hosts`.
+* And then:
+```
+kubectl port-forward kafka-0 9092:9092
+/path/to/local_kafka_bin/kafka-topics.sh --create --topic expedia --partitions 3 --replication-factor 1 --bootstrap-server kafka-0.kafka.confluent.svc.cluster.local:9092
+/path/to/local_kafka_bin/kafka-topics.sh --create --topic expedia_ext --partitions 3 --replication-factor 1 --bootstrap-server kafka-0.kafka.confluent.svc.cluster.local:9092
+```
+
 * We should now configure `kstream-app.yaml` and update various values, 
     and we must not forget about environment variables containing locations of Kafka Cluster and Schema Registry.
 * When we run `kubectl apply -f kstream-app.yaml`, there should be another pod created:

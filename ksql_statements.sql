@@ -24,5 +24,18 @@ create stream expedia_ext_stream (
 	duration varchar
 ) with (
 	kafka_topic = 'expedia_ext',
-	value_format = 'avro'
+	value_format = 'avro',
+	replicas = 1
 );
+
+create table expedia_ext_table 
+	with (replicas = 1)
+	as 
+	select duration, count(duration) as cnt_dur 
+	from expedia_ext_stream 
+	group by duration emit changes;
+
+
+select * from expedia_ext_table emit changes;
+
+

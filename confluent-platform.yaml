@@ -25,15 +25,18 @@ spec:
   dataVolumeCapacity: 100Gi
   configOverrides:
     server:
-      - confluent.balancer.topic.replication.factor=1
-      - confluent.durability.topic.replication.factor=1
-      - confluent.license.topic.replication.factor=1
+      - default.replication.factor=1
       - confluent.tier.metadata.replication.factor=1
-      - transaction.state.log.replication.factor=1
       - offsets.topic.replication.factor=1
-      - config.storage.replication.factor=1
+      - transaction.state.log.replication.factor=1
+      - confluent.cluster.link.metadata.topic.replication.factor=1
       - offset.storage.replication.factor=1
+      - config.storage.replication.factor=1
       - status.storage.replication.factor=1
+      - checkpoints.topic.replication.factor=1
+      - heartbeats.topic.replication.factor=1
+      - offset-syncs.topic.replication.factor=1
+
   metricReporter:
     enabled: true
   dependencies:
@@ -54,6 +57,17 @@ spec:
   configOverrides:
     server:
       - ksql.schema.registry.url=http://schemaregistry.confluent.svc.cluster.local:8081
+      - default.replication.factor=1
+      - confluent.tier.metadata.replication.factor=1
+      - offsets.topic.replication.factor=1
+      - transaction.state.log.replication.factor=1
+      - confluent.cluster.link.metadata.topic.replication.factor=1
+      - offset.storage.replication.factor=1
+      - config.storage.replication.factor=1
+      - status.storage.replication.factor=1
+      - checkpoints.topic.replication.factor=1
+      - heartbeats.topic.replication.factor=1
+      - offset-syncs.topic.replication.factor=1
 ---
 apiVersion: platform.confluent.io/v1beta1
 kind: ControlCenter
@@ -72,6 +86,23 @@ spec:
     ksqldb:
       - name: ksqldb
         url: http://ksqldb.confluent.svc.cluster.local:8088
+  configOverrides:
+    server:
+      - confluent.controlcenter.internal.topics.replication=1
+      - confluent.controlcenter.command.topic.replication=1
+      - confluent.monitoring.interceptor.topic.replication=1
+      - confluent.metrics.topic.replication=1
+      - default.replication.factor=1
+      - confluent.tier.metadata.replication.factor=1
+      - offsets.topic.replication.factor=1
+      - transaction.state.log.replication.factor=1
+      - confluent.cluster.link.metadata.topic.replication.factor=1
+      - offset.storage.replication.factor=1
+      - config.storage.replication.factor=1
+      - status.storage.replication.factor=1
+      - checkpoints.topic.replication.factor=1
+      - heartbeats.topic.replication.factor=1
+      - offset-syncs.topic.replication.factor=1
 ---
 apiVersion: platform.confluent.io/v1beta1
 kind: SchemaRegistry
