@@ -37,6 +37,7 @@ spec:
       - heartbeats.topic.replication.factor=1
       - offset-syncs.topic.replication.factor=1
       - replication.factor=1
+      - ksql.streams.replication.factor=1
   metricReporter:
     enabled: true
   dependencies:
@@ -69,6 +70,7 @@ spec:
       - heartbeats.topic.replication.factor=1
       - offset-syncs.topic.replication.factor=1
       - replication.factor=1
+      - ksql.streams.replication.factor=1
 ---
 apiVersion: platform.confluent.io/v1beta1
 kind: ControlCenter
@@ -105,6 +107,7 @@ spec:
       - heartbeats.topic.replication.factor=1
       - offset-syncs.topic.replication.factor=1
       - replication.factor=1
+      - ksql.streams.replication.factor=1
 ---
 apiVersion: platform.confluent.io/v1beta1
 kind: SchemaRegistry
