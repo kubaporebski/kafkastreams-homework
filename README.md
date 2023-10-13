@@ -66,4 +66,27 @@ kubectl port-forward kafka-0 9092:9092
 
 ![](docs/expedia_ext_results.png)
 
+* We can now go on, to the KSQL part of the task. We shall count of check-ins of each of the duration category. We need to create a stream and then, a table which will group data by a duration. 
+This will be push queries.
+```sql
+create stream expedia_ext_stream (
+    id bigint, hotel_id bigint, duration varchar
+) with (
+    kafka_topic = 'expedia_ext',
+    value_format = 'avro'
+);
+
+create table expedia_ext_dur_table as
+select duration, count(*) as duration_count
+from expedia_ext_stream
+group by duration;
+```
+
+* Now, we need to wait until the table will be populated. We can check status by doing `describe expedia_ext_dur_table extended`.
+When doing select from the newly created table, we can see something like this:
+
+![](docs/expedia_ext_dur_table.png)
+
+
+* These and all other ksql statements are in the `ksql_statements.sql` file in the top root directory of the project.
 * And done!
