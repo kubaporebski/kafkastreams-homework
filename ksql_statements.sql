@@ -7,7 +7,7 @@ create stream expedia_ext_stream (
     value_format = 'avro'
 );
 
--- 1. simple group by:  how many hotel stays in each of durations?
+-- 1. simple group by:  how many hotel stays in each of duration categories?
 create table expedia_ext_dur_table as
 select duration, count(*) as duration_count
 from expedia_ext_stream
@@ -18,7 +18,7 @@ describe expedia_ext_dur_table extended;
 
 select * from expedia_ext_dur_table;
 
--- 2. how many distinct hotels in each duration
+-- 2. how many distinct hotel stays are in each duration category?
 create table expedia_ext_dur_hotels as
 select duration, count(*) as duration_count, count_distinct(hotel_id) as distinct_hotels
 from expedia_ext_stream

@@ -87,6 +87,9 @@ When doing select from the newly created table, we can see something like this:
 
 ![](docs/expedia_ext_dur_table.png)
 
+* Number of distinct hotels in each duration category:
+
+![](docs/expedia_ext_dur_distinct.png)
 
 * These and all other ksql statements are in the `ksql_statements.sql` file in the top root directory of the project.
 * And done!
